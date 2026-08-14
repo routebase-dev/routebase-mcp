@@ -1,0 +1,10 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "Routebase",
+  "version": "1.1.0",
+  "description": "Design, mock, test, document and monitor your APIs from one living OpenAPI spec.",
+  "homepage": "https://routebase.dev/mcp-server/",
+  "repository": "https://github.com/routebase-dev/routebase-mcp",
+  "license": "MIT",
+  "keywords": ["mcp", "api", "openapi", "testing", "documentation", "mock-server"]
+}
