@@ -1,0 +1,58 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "dev.routebase/routebase",
+  "title": "Routebase",
+  "description": "Design, mock, test, document and monitor your APIs from one living OpenAPI spec.",
+  "version": "1.1.0",
+  "websiteUrl": "https://routebase.dev/mcp-server/",
+  "icons": [
+    {
+      "src": "https://routebase.dev/icon.svg",
+      "mimeType": "image/svg+xml",
+      "sizes": ["any"]
+    },
+    {
+      "src": "https://routebase.dev/icon.png",
+      "mimeType": "image/png",
+      "sizes": ["192x192"]
+    }
+  ],
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://mcp.routebase.dev/?region={region}",
+      "variables": {
+        "region": {
+          "description": "Home region of your Routebase account",
+          "isRequired": false,
+          "default": "eu",
+          "choices": ["eu", "us"]
+        }
+      }
+    }
+  ],
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "routebase-mcp",
+      "version": "1.1.0",
+      "runtimeHint": "npx",
+      "transport": { "type": "stdio" },
+      "environmentVariables": [
+        {
+          "name": "ROUTEBASE_API_KEY",
+          "description": "Routebase API key (Settings -> API Keys)",
+          "isRequired": true,
+          "isSecret": true
+        },
+        {
+          "name": "ROUTEBASE_REGION",
+          "description": "Home region of the account: eu (default) or us",
+          "isRequired": false,
+          "default": "eu",
+          "choices": ["eu", "us"]
+        }
+      ]
+    }
+  ]
+}
