@@ -63,8 +63,9 @@ The npm package is a small shim. On first run it downloads the self-contained CL
 | `bin/routebase-mcp.js` | The stdio shim published as the [`routebase-mcp`](https://www.npmjs.com/package/routebase-mcp) npm package |
 | `server.json` | Manifest for the [MCP Registry](https://registry.modelcontextprotocol.io) (`dev.routebase/routebase`) |
 | `plugin.json`, `mcp.json` | [Agent Plugins 1.0](https://github.com/agentplugins/agent-plugins-spec) manifests |
+| `package.json`, `checksums.json` | The published package metadata and the SHA-256 checksums of the binaries this version is pinned to |
 
-> This repository **mirrors** the connector as published. The shim is built and released from Routebase's own repository, so changes made here won't reach npm — please open an issue instead of a pull request against `bin/`.
+> This repository **mirrors** the connector as published, and every file in it is written by the release pipeline in Routebase's own repository. Each release pushes the exact contents of the npm package here and tags it, so changes made here won't reach npm — please open an issue instead of a pull request.
 
 ## Links
 
