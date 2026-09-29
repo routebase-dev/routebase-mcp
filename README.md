@@ -1,6 +1,6 @@
 # routebase-mcp
 
-**Connect your AI agent to your Routebase APIs.** This is the connector for [Routebase](https://routebase.dev) — an API lifecycle platform where documentation, mock servers, contract tests and monitoring are all derived from one OpenAPI spec. Agents work that same spec: designing endpoints and schemas, running contract and security test suites, managing mocks, publishing docs and reading monitors — under the same role-based permissions as the human team. Billing and organization access stay read-only.
+**Let your AI agent work on your APIs in Routebase.** This is the connector for [Routebase](https://routebase.dev), an API lifecycle platform where documentation, mock servers, contract tests and monitoring are all derived from one OpenAPI spec. Agents work on that same spec, so they design endpoints and schemas, run contract and security test suites, manage mocks, publish docs and read monitors under the same role-based permissions as the human team. Billing and organization access stay read-only.
 
 There are two ways to connect. Pick the hosted endpoint unless your client only speaks stdio.
 
@@ -28,7 +28,7 @@ Generate an API key in Routebase under **Settings → API Keys**. The interactiv
 npx routebase-mcp init
 ```
 
-Or add it by hand — Claude Code (`.mcp.json`), Cursor (`.cursor/mcp.json`) and VS Code (`.vscode/mcp.json`) all take the same block:
+Or add it by hand. Claude Code (`.mcp.json`) and Cursor (`.cursor/mcp.json`) take the same block:
 
 ```json
 {
@@ -43,6 +43,19 @@ Or add it by hand — Claude Code (`.mcp.json`), Cursor (`.cursor/mcp.json`) and
   }
 }
 ```
+
+**Codex** reads `~/.codex/config.toml`, the same file for the CLI and the IDE extension:
+
+```toml
+[mcp_servers.routebase]
+command = "npx"
+args = ["-y", "routebase-mcp@latest", "--stdio"]
+
+[mcp_servers.routebase.env]
+ROUTEBASE_API_KEY = "rb_…"
+```
+
+**VS Code** does not need the bridge, because it speaks Streamable HTTP itself. Its `.vscode/mcp.json` reads the top-level key `servers` rather than `mcpServers`, requires `type` on every entry, and expands only `${input:…}`, so the key stays out of the committed file. See the [MCP quickstart](https://docs.routebase.dev/mcp-quickstart/) for the full block.
 
 | Environment variable | Required | Description |
 | --- | --- | --- |
@@ -70,7 +83,9 @@ The npm package is a small shim. On first run it downloads the self-contained CL
 ## Links
 
 - Product: <https://routebase.dev/mcp-server/>
-- Docs: <https://docs.routebase.dev> → *MCP Quickstart*
+- MCP quickstart for every client: <https://docs.routebase.dev/mcp-quickstart/>
+- API keys and scopes: <https://docs.routebase.dev/mcp-authentication/>
+- CLI reference: <https://docs.routebase.dev/mcp-cli-reference/>
 - npm: <https://www.npmjs.com/package/routebase-mcp>
 
 ## License
