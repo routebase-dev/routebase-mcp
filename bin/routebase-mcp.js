@@ -48,26 +48,44 @@ if (!expectedSha) {
 const cacheDir = path.join(os.homedir(), ".routebase", "bin", pkg.version);
 const binPath = path.join(cacheDir, fileName);
 
+// A download that receives no bytes for this long is given up, instead of hanging npx forever.
+const STALL_TIMEOUT_MS = 30_000;
+
+// Node reports a failed connect to a host with IPv4 and IPv6 addresses as an AggregateError whose
+// message is empty, so the reason sits only in the inner errors.
+function describe(err) {
+  if (Array.isArray(err.errors) && err.errors.length > 0) {
+    return err.errors
+      .map((e) => [e.code, e.address && `${e.address}:${e.port}`].filter(Boolean).join(" ") || e.message)
+      .join(", ");
+  }
+  return err.message || err.code || String(err);
+}
+
 function download(url, dest, redirects = 0) {
   return new Promise((resolve, reject) => {
     if (redirects > 3) return reject(new Error("too many redirects"));
-    https
-      .get(url, (res) => {
-        if (res.statusCode >= 301 && res.statusCode <= 308 && res.headers.location) {
-          res.resume();
-          return resolve(download(res.headers.location, dest, redirects + 1));
-        }
-        if (res.statusCode !== 200) {
-          res.resume();
-          return reject(new Error(`HTTP ${res.statusCode} for ${url}`));
-        }
-        const tmp = `${dest}.download`;
-        const out = fs.createWriteStream(tmp, { mode: 0o755 });
-        res.pipe(out);
-        out.on("finish", () => out.close(() => resolve(tmp)));
-        out.on("error", reject);
-      })
-      .on("error", reject);
+    const req = https.get(url, (res) => {
+      if (res.statusCode >= 301 && res.statusCode <= 308 && res.headers.location) {
+        res.resume();
+        return resolve(download(res.headers.location, dest, redirects + 1));
+      }
+      if (res.statusCode !== 200) {
+        res.resume();
+        return reject(new Error(`HTTP ${res.statusCode} for ${url}`));
+      }
+      const tmp = `${dest}.download`;
+      const out = fs.createWriteStream(tmp, { mode: 0o755 });
+      res.pipe(out);
+      // Without this a connection that drops mid-body never finishes the write stream.
+      res.on("error", reject);
+      out.on("finish", () => out.close(() => resolve(tmp)));
+      out.on("error", reject);
+    });
+    req.setTimeout(STALL_TIMEOUT_MS, () =>
+      req.destroy(new Error(`no data for ${STALL_TIMEOUT_MS / 1000} s`)),
+    );
+    req.on("error", reject);
   });
 }
 
@@ -80,7 +98,12 @@ async function ensureBinary() {
   const url = `https://releases.routebase.dev/cli/${pkg.version}/${fileName}`;
   process.stderr.write(`routebase-mcp: downloading ${url} (first run)\n`);
   fs.mkdirSync(cacheDir, { recursive: true });
-  const tmp = await download(url, binPath);
+  let tmp;
+  try {
+    tmp = await download(url, binPath);
+  } catch (err) {
+    fail(`download of ${url} failed (${describe(err)}). Check your connection and run the command again.`);
+  }
   const actual = sha256(tmp);
   if (actual !== expectedSha) {
     fs.rmSync(tmp, { force: true });
@@ -96,4 +119,4 @@ ensureBinary()
     if (result.error) fail(result.error.message);
     process.exit(result.status ?? 1);
   })
-  .catch((err) => fail(err.message));
+  .catch((err) => fail(describe(err)));

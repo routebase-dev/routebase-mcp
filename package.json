@@ -1,6 +1,6 @@
 {
   "name": "routebase-mcp",
-  "version": "1.1.4",
+  "version": "2.0.1",
   "mcpName": "dev.routebase/routebase",
   "description": "stdio MCP server for Routebase. AI agents in Claude Code, Cursor, Codex and other MCP clients design, mock, test and document APIs from one OpenAPI spec, under your team's permissions.",
   "bin": {

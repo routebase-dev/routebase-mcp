@@ -1,6 +1,6 @@
 {
-  "routebase-mcp-linux-x64": "738c0442e76c50a9715160856709bd69fa569dbf43545db1d36bac7580da7ea8",
-  "routebase-mcp-osx-arm64": "edcfd8c52954e73a977ade903114c14337d18c2208859979a39e3f382ced3834",
-  "routebase-mcp-osx-x64": "b4ec12584b6f4ae9ab5a7def6625c66f649625e79912be7d773e3d88646492b2",
-  "routebase-mcp-win-x64.exe": "3642af2d2529ed6cf6eb9e8cb5ee113d439cad3a1ef4e48d8643e3824b1ca9d0"
+  "routebase-mcp-linux-x64": "4df9a2306e0fb82156f639c816ec6a7042fb2e69bd2447fa5272c902095345df",
+  "routebase-mcp-osx-arm64": "2c636093812d843a3c11621b80f766d9a813f96ba7df80530a66b89780d5b611",
+  "routebase-mcp-osx-x64": "d557a7083d0e2b4d2e2e2377667ba139cd4dab65b7e98db9749d93d7751f9b53",
+  "routebase-mcp-win-x64.exe": "ecb206752090bda5d9d1bfe14a3a349f6f6abcb3994e7e1a0eff086809bc1695"
 }
